@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebChat Monitoring Dashboard</title>
+    <!-- Подключаем конфигурацию ПЕРЕД стилями и скриптами -->
+<script src="cache-control.php?file=monitoring-config.js"></script>
+<link rel="stylesheet" href="cache-control.php?file=monitoring.css">
+</head>
+<body>
+    <div class="header">
+    <div class="container">
+        <div class="header-content">
+            <h1>
+                <span class="emoji-icon">📊</span>
+                <span data-translate="header.title">WebChat Monitoring Dashboard</span>
+                <span class="live-indicator">
+                    <span class="live-dot"></span>
+                    <span data-translate="header.live">Live</span>
+                </span>
+            </h1>
+            <div class="header-controls">
+                <div class="theme-switcher">
+                    <span>☀️</span>
+                    <div class="theme-toggle" onclick="toggleTheme()">
+                        <div class="theme-toggle-slider">
+                            <span id="themeIcon">☀️</span>
+                        </div>
+                    </div>
+                    <span>🌙</span>
+                </div>
+                <button class="settings-btn" onclick="openSettingsModal()">
+                    <span style="font-size: 20px;">⚙️</span>
+                    <span class="settings-text" data-translate="header.settings">Настройки</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    <div class="container">
+        <!-- Фильтры -->
+        <div class="filters">
+            <!-- Фильтр периода -->
+            <div class="filter-group" data-filter="period" style="display: none;">
+                <label data-translate="filters.period.label">Период</label>
+                <select id="periodFilter">
+                    <option value="1h" data-translate="filters.period.options.1h">Последний час</option>
+                    <option value="24h" selected data-translate="filters.period.options.24h">Последние 24 часа</option>
+                    <option value="7d" data-translate="filters.period.options.7d">Последняя неделя</option>
+                    <option value="30d" data-translate="filters.period.options.30d">Последний месяц</option>
+                    <option value="custom" data-translate="filters.period.options.custom">Произвольный период</option>
+                </select>
+            </div>
+            
+            <div class="filter-group" id="customDateRange" style="display: none;">
+                <label data-translate="filters.period.customStart">Дата начала</label>
+                <input type="datetime-local" id="startDate">
+            </div>
+            
+            <div class="filter-group" id="customDateRangeEnd" style="display: none;">
+                <label data-translate="filters.period.customEnd">Дата окончания</label>
+                <input type="datetime-local" id="endDate">
+            </div>
+            
+            <!-- Фильтр конфигурации -->
+            <div class="filter-group" data-filter="configuration" style="display: none;">
+                <label data-translate="filters.configuration.label">Конфигурация</label>
+                <select id="configFilter">
+                    <option value="all" data-translate="filters.configuration.all">Все конфигурации</option>
+                    <!-- Опции будут добавлены динамически -->
+                </select>
+            </div>
+            
+            <!-- Фильтр платформы -->
+            <div class="filter-group" data-filter="platform" style="display: none;">
+                <label data-translate="filters.platform.label">Платформа</label>
+                <select id="platformFilter">
+                    <option value="all" data-translate="filters.platform.all">Все платформы</option>
+                    <!-- Опции будут добавлены динамически -->
+                </select>
+            </div>
+
+            <!-- Кнопки и поиск -->
+            <div class="filter-group buttons-group" data-filter="refreshButton" style="display: none;">
+                <label style="visibility: hidden;">_</label>
+                <button class="refresh-btn" onclick="refreshData()">
+                    <span class="refresh-icon">🔄</span>
+                    <span data-translate="filters.buttons.refresh">Обновить</span>
+                </button>
+            </div>
+            
+           <!-- Кнопки анализа -->
+<div class="filter-group" data-filter="analysisButtons" style="display: none;">
+    <label data-translate="analysisResultLanguage.label">Язык результата анализа</label>
+    <div style="display: flex; gap: 10px;">
+        <button class="analysis-btn" id="resultLanguageBtn" onclick="openResultLanguageModal()">
+            <span id="resultLanguageFlag">🌐</span> <span id="resultLanguageText">...</span>
+        </button>
+        <button class="analysis-btn" onclick="analyzeByLanguage()">
+            🌐 <span data-translate="filters.buttons.analyzeByLanguage">Анализ по языку</span>
+        </button>
+    </div>
+</div>
+        </div>
+        
+        <!-- Статистика -->
+        <div class="stats-grid">
+            <!-- Карточка: Всего пользователей -->
+            <div class="stat-card" data-stat="totalUsers" style="display: none;">
+                <div class="sparkles">
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                </div>
+                <div class="stat-card-header">
+                    <div>
+                        <h3 data-translate="stats.totalUsers.title">Всего пользователей</h3>
+                        <div class="stat-value" id="totalUsers">-</div>
+                        <div class="stat-change positive" id="usersChange">
+                            <span class="trend-icon">📈</span>
+                            <span>+12% <span data-translate="stats.totalUsers.trend">за период</span></span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">👥</div>
+                </div>
+            </div>
+            
+            <!-- Карточка: Активные сессии -->
+            <div class="stat-card" data-stat="activeSessions" style="display: none;">
+                <div class="sparkles">
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                </div>
+                <div class="stat-card-header">
+                    <div>
+                        <h3 data-translate="stats.activeSessions.title">Активные сессии</h3>
+                        <div class="stat-value" id="activeSessions">-</div>
+                        <div class="stat-change" id="sessionsChange">
+                            <span class="trend-icon">📊</span>
+                            <span data-translate="stats.activeSessions.trend">Стабильно</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">🟢</div>
+                </div>
+            </div>
+            
+            <!-- Карточка: Среднее время сессии -->
+            <div class="stat-card" data-stat="avgSessionTime" style="display: none;">
+                <div class="sparkles">
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                </div>
+                <div class="stat-card-header">
+                    <div>
+                        <h3 data-translate="stats.avgSessionTime.title">Среднее время сессии</h3>
+                        <div class="stat-value" id="avgSessionTime">-</div>
+                        <div class="stat-change positive" id="sessionTimeChange">
+                            <span class="trend-icon">⏱️</span>
+                            <span>+5% <span data-translate="stats.avgSessionTime.trend">за период</span></span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">⏰</div>
+                </div>
+            </div>
+            
+            <!-- Карточка: Всего сообщений -->
+            <div class="stat-card" data-stat="totalMessages" style="display: none;">
+                <div class="sparkles">
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                    <span class="sparkle"></span>
+                </div>
+                <div class="stat-card-header">
+                    <div>
+                        <h3 data-translate="stats.totalMessages.title">Всего сообщений</h3>
+                        <div class="stat-value" id="totalMessages">-</div>
+                        <div class="stat-change positive" id="messagesChange">
+                            <span class="trend-icon">💬</span>
+                            <span>+18% <span data-translate="stats.totalMessages.trend">за период</span></span>
+                        </div>
+                    </div>
+                    <div class="stat-icon">📩</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Графики -->
+        <div class="charts-grid">
+            <!-- График активности -->
+            <div class="chart-card" data-chart="activity" style="display: none;">
+                <h3>
+                    📈 <span data-translate="charts.activity.title">Активность по времени</span>
+                    <span class="chart-refresh tooltip" data-tooltip-translate="charts.activity.refresh" data-tooltip="Обновить график" onclick="updateCharts()">🔄</span>
+                </h3>
+                <div class="chart-placeholder" id="activityChart">
+                    <canvas id="activityCanvas" width="400" height="300"></canvas>
+                </div>
+            </div>
+            
+            <!-- График географии -->
+            <div class="chart-card" data-chart="geography" style="display: none;">
+                <h3>
+                    🌍 <span data-translate="charts.geography.title">География пользователей</span>
+                    <span class="chart-refresh tooltip" data-tooltip-translate="charts.geography.refresh" data-tooltip="Обновить график" onclick="updateCharts()">🔄</span>
+                </h3>
+                <div class="chart-placeholder" id="geoChart">
+                    <canvas id="geoCanvas" width="400" height="300"></canvas>
+                </div>
+            </div>
+            
+            <!-- График платформ -->
+            <div class="chart-card" data-chart="platforms" style="display: none;">
+                <h3>
+                    📱 <span data-translate="charts.platforms.title">Распределение по платформам</span>
+                    <span class="chart-refresh tooltip" data-tooltip-translate="charts.platforms.refresh" data-tooltip="Обновить график" onclick="updateCharts()">🔄</span>
+                </h3>
+                <div class="chart-placeholder" id="platformChart">
+                    <canvas id="platformCanvas" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+       <!-- Таблица пользователей -->
+<div class="users-table">
+    <!-- Переключатель вкладок (показывается только если email мониторинг включен) -->
+    <div class="table-tabs" id="tableTabs" style="display: none;">
+        <button class="tab-btn active" onclick="switchTableTab('messengers')" data-tab="messengers">
+            💬 <span data-translate="emailMonitoring.tabs.messengers">Пользователи мессенджеров</span>
+        </button>
+        <button class="tab-btn" onclick="switchTableTab('email')" data-tab="email">
+            📧 <span data-translate="emailMonitoring.tabs.email">Пользователи Email</span>
+        </button>
+    </div>
+    
+    <!-- Контейнер для таблицы мессенджеров -->
+    <div id="messengersTableContainer" class="table-container active">
+        <div class="table-header">
+            <h3>👥 <span data-translate="table.title">Пользователи</span></h3>
+            <div class="table-controls">
+                <input type="text" class="search-box" data-filter="search" style="display: none;" 
+                       placeholder="🔍 Поиск по IP, стране, городу..." 
+                       data-translate-placeholder="filters.search.placeholder" id="searchBox">
+                <button class="export-btn" onclick="exportData()">
+                    📤 <span data-translate="table.export">Экспорт</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Десктопная таблица -->
+<div class="table-wrapper" id="tableContainer">
+    <table>
+        <thead>
+            <tr id="tableHeaderRow">
+                <!-- Заголовки колонок будут добавлены динамически -->
+            </tr>
+        </thead>
+        <tbody id="usersTableBody">
+            <!-- Строки будут добавлены динамически через JavaScript -->
+        </tbody>
+    </table>
+</div>
+        
+        <!-- Мобильные карточки -->
+        <div class="mobile-cards" id="mobileCards"></div>
+        
+        <div class="pagination">
+            <button id="prevPage" onclick="changePage(-1)">
+                ← <span data-translate="pagination.previous">Назад</span>
+            </button>
+            <div class="page-numbers" id="pageNumbers"></div>
+            <button id="nextPage" onclick="changePage(1)">
+                <span data-translate="pagination.next">Вперед</span> →
+            </button>
+        </div>
+    </div>
+    <!-- Конец контейнера мессенджеров -->
+    
+    <!-- Контейнер для таблицы email -->
+    <div id="emailTableContainer" class="table-container" style="display: none;">
+        <div class="table-header">
+            <h3>📧 <span data-translate="emailMonitoring.tabs.email">Пользователи Email</span></h3>
+            <div class="table-controls">
+                <input type="text" class="search-box" placeholder="🔍 Поиск по email, имени, теме..." 
+                       id="emailSearchBox">
+                <button class="export-btn" onclick="exportEmailData()">
+                    📤 <span data-translate="table.export">Экспорт</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Десктопная таблица email -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr id="emailTableHeaderRow">
+                        <!-- Заголовки будут добавлены динамически -->
+                    </tr>
+                </thead>
+                <tbody id="emailTableBody">
+                    <tr>
+                        <td colspan="9" class="loading">
+                            <div class="spinner"></div>
+                            <span data-translate="emailMonitoring.table.loading">Загрузка данных email...</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Мобильные карточки email -->
+        <div class="mobile-cards" id="emailMobileCards"></div>
+        
+        <!-- Пагинация для email -->
+        <div class="pagination">
+            <button id="emailPrevPage" onclick="changeEmailPage(-1)">
+                ← <span data-translate="pagination.previous">Назад</span>
+            </button>
+            <div class="page-numbers" id="emailPageNumbers"></div>
+            <button id="emailNextPage" onclick="changeEmailPage(1)">
+                <span data-translate="pagination.next">Вперед</span> →
+            </button>
+        </div>
+    </div>
+    <!-- Конец контейнера email -->
+</div>
+</div>
+
+    <!-- Модальные окна -->
+    <div id="dialogModal" class="dialog-modal" onclick="closeDialog(event)">
+        <div class="dialog-content" onclick="event.stopPropagation()">
+            <div class="dialog-header">
+                <h3 id="dialogTitle" data-translate="dialogs.dialog.title">Диалог</h3>
+                <button class="dialog-close" onclick="closeDialog()">×</button>
+            </div>
+            <div class="dialog-body" id="dialogBody">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p data-translate="dialogs.dialog.loading">Загрузка диалога...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="analysisModal" class="dialog-modal" onclick="closeAnalysis(event)">
+        <div class="dialog-content" onclick="event.stopPropagation()">
+            <div class="dialog-header">
+                <h3 id="analysisTitle" data-translate="dialogs.analysis.title">Анализ диалога</h3>
+                <button class="dialog-close" onclick="closeAnalysis()">×</button>
+            </div>
+            <div class="dialog-body" id="analysisBody">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p data-translate="dialogs.analysis.loading">Анализируем диалог...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="languageModal" class="dialog-modal" onclick="closeLanguageModal(event)">
+    <div class="dialog-content" style="width: 400px;" onclick="event.stopPropagation()">
+        <div class="dialog-header">
+            <h3 data-translate="dialogs.language.title">Выберите язык для анализа</h3>
+            <button class="dialog-close" onclick="closeLanguageModal()">×</button>
+        </div>
+        <div class="dialog-body" style="padding: 20px;">
+            <div class="language-options" id="languageOptionsContainer">
+                <!-- Кнопки языков будут добавлены динамически -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно выбора языка результатов -->
+<div id="resultLanguageModal" class="dialog-modal" onclick="closeResultLanguageModal(event)">
+    <div class="dialog-content" style="width: 400px;" onclick="event.stopPropagation()">
+        <div class="dialog-header">
+            <h3 data-translate="analysisResultLanguage.modalTitle">Выберите язык результатов анализа</h3>
+            <button class="dialog-close" onclick="closeResultLanguageModal()">×</button>
+        </div>
+        <div class="dialog-body" style="padding: 20px;">
+            <div class="language-options" id="resultLanguageOptionsContainer">
+                <!-- Кнопки языков будут добавлены динамически -->
+            </div>
+        </div>
+    </div>
+</div>
+    
+  <!-- Модальное окно карточки клиента -->
+<div id="clientCardModal" class="dialog-modal" onclick="closeClientCard(event)">
+    <div class="dialog-content" style="max-width: 900px;">
+        <div class="dialog-header">
+            <h3 id="clientCardTitle">Карточка клиента</h3>
+            <button class="dialog-close" onclick="closeClientCard()">&times;</button>
+        </div>
+        <div class="dialog-body" id="clientCardBody" style="padding: 0;">
+            <!-- Контент будет загружаться динамически -->
+        </div>
+    </div>
+</div>  
+    
+   <!-- Модальное окно подтверждения удаления -->
+<div id="deleteConfirmModal" class="dialog-modal" onclick="closeDeleteConfirm(event)">
+    <div class="modal-content delete-confirm-modal">
+        <div class="delete-modal-icon">
+            ⚠️
+        </div>
+        <h2 id="deleteModalTitle"></h2>
+        <p id="deleteModalMessage"></p>
+        <p id="deleteModalId" class="delete-id-text"></p>
+        <div class="delete-modal-buttons">
+            <button class="btn-cancel" onclick="closeDeleteConfirm(true)">
+                <span id="deleteCancelBtn"></span>
+            </button>
+            <button class="btn-delete" onclick="confirmDelete()">
+                <span id="deleteConfirmBtn"></span>
+            </button>
+        </div>
+    </div>
+</div>
+    
+    <!-- Модальное окно подтверждения отправки в CRM -->
+<div id="crmConfirmModal" class="dialog-modal" onclick="closeCRMConfirm(event)">
+    <div class="modal-content delete-confirm-modal">
+        <div class="delete-modal-icon">🔗</div>
+        <h2 class="delete-modal-title" id="crmConfirmTitle"></h2>
+        <p id="crmConfirmInfo" class="delete-id-text"></p>
+        <div class="delete-modal-buttons">
+            <button class="btn-cancel" onclick="closeCRMConfirm(false)">
+                <span id="crmCancelBtn"></span>
+            </button>
+            <button class="btn-delete crm-send-btn" onclick="confirmCRMSend()">
+                <span id="crmSendBtn"></span>
+            </button>
+        </div>
+    </div>
+</div>
+    
+   <!-- Модальное окно настроек -->
+    <div id="settingsModal" class="dialog-modal" onclick="closeSettingsModal(event)">
+        <div class="dialog-content" style="width: 600px;" onclick="event.stopPropagation()">
+            <div class="dialog-header">
+                <h3>⚙️ <span data-translate="dialogs.settings.title">Настройки мониторинга</span></h3>
+                <button class="dialog-close" onclick="closeSettingsModal()">×</button>
+            </div>
+            <div class="dialog-body" style="padding: 30px;">
+                <!-- Настройки автоанализа -->
+                <div class="settings-section">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        🤖 <span data-translate="dialogs.settings.autoAnalysis.title">Автоматический анализ диалогов</span>
+                    </h4>
+                    <div class="settings-row">
+                        <label data-translate="dialogs.settings.autoAnalysis.enable">Включить автоанализ:</label>
+                        <div class="toggle-switch" id="autoAnalysisToggleModal" onclick="toggleAutoAnalysis()" style="position: relative; width: 50px; height: 24px; background: var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.3s ease;">
+                            <div class="toggle-slider" style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: all 0.3s ease;"></div>
+                        </div>
+                        <span id="serverStatusModal" style="font-size: 12px; color: var(--text-secondary);">🌐 <span data-translate="dialogs.settings.autoAnalysis.serverMode">Серверный режим</span></span>
+                    </div>
+                    <div class="settings-row">
+                        <label data-translate="dialogs.settings.autoAnalysis.delay">Задержка после неактивности:</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" id="analysisDelayModal" value="30" min="5" max="120" class="settings-input">
+                            <span style="color: var(--text-secondary);" data-translate="dialogs.settings.autoAnalysis.minutes">минут</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-divider"></div>
+                
+                <!-- Настройки автоочистки БД -->
+                <div class="settings-section">
+                    <h4 style="color: var(--accent-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        🗑️ <span data-translate="dialogs.settings.dbCleanup.title">Автоматическая очистка базы данных</span>
+                    </h4>
+                    <div style="margin-bottom: 15px;">
+                        <span style="font-size: 14px; color: var(--success);">
+                            ✅ <span data-translate="dialogs.settings.dbCleanup.active">Активна (ежедневно в 3:00)</span>
+                        </span>
+                    </div>
+                    <div class="settings-row">
+                        <label data-translate="dialogs.settings.dbCleanup.monitoringData">Хранить данные мониторинга:</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" id="monitoringRetentionModal" value="30" min="7" max="365" class="settings-input">
+                            <span style="color: var(--text-secondary);" data-translate="dialogs.settings.dbCleanup.days">дней</span>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <label data-translate="dialogs.settings.dbCleanup.analysisResults">Хранить результаты анализов:</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" id="analysisRetentionModal" value="90" min="30" max="365" class="settings-input">
+                            <span style="color: var(--text-secondary);" data-translate="dialogs.settings.dbCleanup.days">дней</span>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <label data-translate="dialogs.settings.dbCleanup.dialogsData">Хранить диалоги:</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" id="dialogsRetentionModal" value="60" min="7" max="365" class="settings-input">
+                            <span style="color: var(--text-secondary);" data-translate="dialogs.settings.dbCleanup.days">дней</span>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <label data-translate="dialogs.settings.dbCleanup.contactsData">Хранить контактные данные:</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" id="contactsRetentionModal" value="180" min="30" max="365" class="settings-input">
+                            <span style="color: var(--text-secondary);" data-translate="dialogs.settings.dbCleanup.days">дней</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-divider"></div>
+                
+                <!-- Настройки интеграции с CRM -->
+<div class="settings-section" id="crmSettingsSection">
+    <h4 style="color: var(--accent-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+        🔗 <span data-translate="crm.title">Настройки интеграции с CRM</span>
+    </h4>
+    
+    <div class="settings-row">
+        <label data-translate="crm.webhookUrl">Webhook URL для CRM:</label>
+        <input type="text" id="crmWebhookUrl" placeholder="https://your-crm.com/webhook/endpoint" class="settings-input" style="width: 100%; margin-top: 8px;">
+        <small style="color: var(--text-secondary); display: block; margin-top: 8px; font-size: 12px;">
+            <span data-translate="crm.webhookHint">Получите webhook URL в настройках вашей CRM системы</span>
+        </small>
+    </div>
+    
+    <div class="settings-row">
+        <label data-translate="crm.autoSend" style="flex: 1;">Автоматическая отправка горячих лидов:</label>
+        <div class="toggle-switch" id="crmAutoSendToggle" onclick="toggleCRMAutoSend()" style="position: relative; width: 50px; height: 24px; background: var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; flex-shrink: 0;">
+            <div class="toggle-slider" style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: all 0.3s ease;"></div>
+        </div>
+    </div>
+    
+    <div class="settings-row">
+        <label data-translate="crm.minScore">Минимальный Lead Score для автоотправки:</label>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="number" id="crmMinLeadScore" min="50" max="100" value="80" class="settings-input">
+            <span style="color: var(--text-secondary);" data-translate="crm.scoreRange">(50-100)</span>
+        </div>
+    </div>
+    
+    <div class="settings-row" style="margin-top: 20px;">
+        <button onclick="testCRMConnection()" class="settings-save-btn" style="margin-right: 10px;">
+            🔧 <span data-translate="crm.testConnection">Тест подключения</span>
+        </button>
+        <span id="crmTestResult" style="font-size: 14px;"></span>
+    </div>
+</div>
+                
+                <!-- Кнопки сохранения -->
+                <div class="settings-actions">
+                    <button class="settings-save-btn" onclick="saveAllSettings()">
+                        💾 <span data-translate="dialogs.settings.buttons.save">Сохранить все настройки</span>
+                    </button>
+                    <button class="settings-cancel-btn" onclick="closeSettingsModal()">
+                        <span data-translate="dialogs.settings.buttons.cancel">Отмена</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- ========================================= -->
+<!-- МОДАЛЬНОЕ ОКНО ЛОГИНА (АУТЕНТИФИКАЦИЯ) -->
+<!-- ========================================= -->
+<div id="authModal" class="auth-modal hidden">
+    <div class="auth-backdrop"></div>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Заголовок -->
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <span class="auth-logo-icon">🔐</span>
+                    <h1 class="auth-logo-text" data-translate="auth.modalTitle">Monitoring Dashboard</h1>
+                </div>
+                <p class="auth-subtitle" data-translate="auth.modalSubtitle">Введите учетные данные для доступа</p>
+            </div>
+
+            <!-- Сообщение об ошибке -->
+            <div id="authErrorMessage" class="auth-error-message" style="display: none;">
+                <span class="auth-error-icon">⚠️</span>
+                <span id="authErrorText"></span>
+            </div>
+
+            <!-- Форма логина -->
+            <form id="authLoginForm" class="auth-form">
+                <div class="auth-form-group">
+                    <label for="authUsername" class="auth-label">
+                        <span class="auth-label-icon">👤</span>
+                        <span data-translate="auth.usernameLabel">Имя пользователя</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="authUsername"
+                        name="username"
+                        class="auth-input"
+                        required
+                        autocomplete="username"
+                        data-translate-placeholder="auth.usernamePlaceholder"
+                        placeholder="Введите логин"
+                        autofocus
+                    >
+                </div>
+
+                <div class="auth-form-group">
+                    <label for="authPassword" class="auth-label">
+                        <span class="auth-label-icon">🔑</span>
+                        <span data-translate="auth.passwordLabel">Пароль</span>
+                    </label>
+                    <div class="auth-password-wrapper">
+                        <input
+                            type="password"
+                            id="authPassword"
+                            name="password"
+                            class="auth-input"
+                            required
+                            autocomplete="current-password"
+                            data-translate-placeholder="auth.passwordPlaceholder"
+                            placeholder="Введите пароль"
+                        >
+                        <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility()">
+                            <span id="authPasswordToggleIcon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="auth-form-group auth-remember">
+                    <label class="auth-checkbox-label">
+                        <input type="checkbox" id="authRememberMe" name="rememberMe" class="auth-checkbox">
+                        <span class="auth-checkbox-text" data-translate="auth.rememberMe">Запомнить меня на 7 дней</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="auth-submit-btn" id="authSubmitBtn">
+                    <span id="authSubmitText" data-translate="auth.loginButton">Войти</span>
+                    <span id="authSubmitSpinner" class="auth-spinner" style="display: none;"></span>
+                </button>
+            </form>
+
+            <!-- Футер -->
+            <div class="auth-footer">
+                <p class="auth-footer-text">
+                    <span class="auth-footer-icon">🔒</span>
+                    <span data-translate="auth.secureConnection">Защищенное соединение</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="cache-control.php?file=monitoring.js"></script>
+</body>
+</html>
