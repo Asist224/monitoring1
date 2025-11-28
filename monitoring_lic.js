@@ -118,6 +118,24 @@ const WORKER_URL = 'https://monitoring-widget.evgenstrizh.workers.dev'; // URL �
     }
 })();
 
+// Форматирование диапазона бюджета
+function formatBudgetRange(budget) {
+    if (!budget || !budget.range) return '';
+
+    // Если range уже строка, возвращаем её
+    if (typeof budget.range === 'string') return budget.range;
+
+    // Если range объект с min и max, форматируем
+    if (typeof budget.range === 'object' && budget.range !== null) {
+        const currency = budget.currency || '';
+        const min = budget.range.min || 0;
+        const max = budget.range.max || 0;
+        return `${min.toLocaleString()} - ${max.toLocaleString()} ${currency}`.trim();
+    }
+
+    return String(budget.range);
+}
+
 // Показ ошибки лицензии
 function showLicenseError(title, message) {
     document.body.innerHTML = `
@@ -6398,7 +6416,7 @@ ${analysisData.bantQualification.budget ? `
                 ${analysisData.bantQualification.budget.range ? `
                     <div class="bant-detail-row">
                         <span class="bant-detail-label">${MonitoringConfigManager.getTranslation('bantAnalysis.factors.budget.range')}:</span>
-                        <span class="bant-detail-value">${analysisData.bantQualification.budget.range}</span>
+                        <span class="bant-detail-value">${formatBudgetRange(analysisData.bantQualification.budget)}</span>
                     </div>
                 ` : ''}
                 <div class="bant-detail-row">
