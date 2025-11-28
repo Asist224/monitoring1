@@ -6303,7 +6303,7 @@ ${analysisData.bantQualification.budget ? `
                 ${analysisData.bantQualification.budget.range ? `
                     <div class="bant-detail-row">
                         <span class="bant-detail-label">${MonitoringConfigManager.getTranslation('bantAnalysis.factors.budget.range')}:</span>
-                        <span class="bant-detail-value">${analysisData.bantQualification.budget.range}</span>
+                        <span class="bant-detail-value">${analysisData.bantQualification.budget.range.min} - ${analysisData.bantQualification.budget.range.max} ${analysisData.bantQualification.budget.currency || ''}</span>
                     </div>
                 ` : ''}
                 <div class="bant-detail-row">
