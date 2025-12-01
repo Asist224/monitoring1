@@ -1311,6 +1311,7 @@ bantAnalysis: {
             painPoints: "Болевые точки",
             confidence: "Уверенность",
             severityLevels: {
+                critical: "Критическая",
                 high: "Высокая",
                 medium: "Средняя",
                 low: "Низкая"
@@ -1324,6 +1325,9 @@ bantAnalysis: {
             confidence: "Уверенность",
             urgencyLevels: {
                 immediate: "Немедленно",
+                this_week: "На этой неделе",
+                this_month: "В этом месяце",
+                this_quarter: "В этом квартале",
                 short_term: "Короткий срок",
                 medium_term: "Средний срок",
                 long_term: "Долгий срок",
@@ -1893,6 +1897,7 @@ bantAnalysis: {
             painPoints: "Pain Points",
             confidence: "Confidence",
             severityLevels: {
+                critical: "Critical",
                 high: "High",
                 medium: "Medium",
                 low: "Low"
@@ -1906,6 +1911,9 @@ bantAnalysis: {
             confidence: "Confidence",
             urgencyLevels: {
                 immediate: "Immediate",
+                this_week: "This Week",
+                this_month: "This Month",
+                this_quarter: "This Quarter",
                 short_term: "Short Term",
                 medium_term: "Medium Term",
                 long_term: "Long Term",
@@ -2471,6 +2479,7 @@ bantAnalysis: {
             painPoints: "Puntos de dolor",
             confidence: "Confianza",
             severityLevels: {
+                critical: "Crítica",
                 high: "Alta",
                 medium: "Media",
                 low: "Baja"
@@ -2484,6 +2493,9 @@ bantAnalysis: {
             confidence: "Confianza",
             urgencyLevels: {
                 immediate: "Inmediato",
+                this_week: "Esta semana",
+                this_month: "Este mes",
+                this_quarter: "Este trimestre",
                 short_term: "Corto plazo",
                 medium_term: "Mediano plazo",
                 long_term: "Largo plazo",
@@ -3049,6 +3061,7 @@ bantAnalysis: {
             painPoints: "Points de douleur",
             confidence: "Confiance",
             severityLevels: {
+                critical: "Critique",
                 high: "Élevée",
                 medium: "Moyenne",
                 low: "Faible"
@@ -3062,6 +3075,9 @@ bantAnalysis: {
             confidence: "Confiance",
             urgencyLevels: {
                 immediate: "Immédiat",
+                this_week: "Cette semaine",
+                this_month: "Ce mois",
+                this_quarter: "Ce trimestre",
                 short_term: "Court terme",
                 medium_term: "Moyen terme",
                 long_term: "Long terme",
@@ -3626,6 +3642,7 @@ bantAnalysis: {
             painPoints: "Schmerzpunkte",
             confidence: "Vertrauen",
             severityLevels: {
+                critical: "Kritisch",
                 high: "Hoch",
                 medium: "Mittel",
                 low: "Niedrig"
@@ -3639,6 +3656,9 @@ bantAnalysis: {
             confidence: "Vertrauen",
             urgencyLevels: {
                 immediate: "Sofort",
+                this_week: "Diese Woche",
+                this_month: "Diesen Monat",
+                this_quarter: "Dieses Quartal",
                 short_term: "Kurzfristig",
                 medium_term: "Mittelfristig",
                 long_term: "Langfristig",
@@ -4203,6 +4223,7 @@ bantAnalysis: {
             painPoints: "Punti critici",
             confidence: "Confidenza",
             severityLevels: {
+                critical: "Critica",
                 high: "Alta",
                 medium: "Media",
                 low: "Bassa"
@@ -4216,6 +4237,9 @@ bantAnalysis: {
             confidence: "Confidenza",
             urgencyLevels: {
                 immediate: "Immediato",
+                this_week: "Questa settimana",
+                this_month: "Questo mese",
+                this_quarter: "Questo trimestre",
                 short_term: "Breve termine",
                 medium_term: "Medio termine",
                 long_term: "Lungo termine",
@@ -4780,6 +4804,7 @@ bantAnalysis: {
             painPoints: "Pontos de dor",
             confidence: "Confiança",
             severityLevels: {
+                critical: "Crítica",
                 high: "Alta",
                 medium: "Média",
                 low: "Baixa"
@@ -4793,6 +4818,9 @@ bantAnalysis: {
             confidence: "Confiança",
             urgencyLevels: {
                 immediate: "Imediato",
+                this_week: "Esta semana",
+                this_month: "Este mês",
+                this_quarter: "Este trimestre",
                 short_term: "Curto prazo",
                 medium_term: "Médio prazo",
                 long_term: "Longo prazo",
@@ -5356,6 +5384,7 @@ bantAnalysis: {
             painPoints: "痛点",
             confidence: "置信度",
             severityLevels: {
+                critical: "严重",
                 high: "高",
                 medium: "中",
                 low: "低"
@@ -5369,6 +5398,9 @@ bantAnalysis: {
             confidence: "置信度",
             urgencyLevels: {
                 immediate: "立即",
+                this_week: "本周",
+                this_month: "本月",
+                this_quarter: "本季度",
                 short_term: "短期",
                 medium_term: "中期",
                 long_term: "长期",
@@ -5933,6 +5965,7 @@ bantAnalysis: {
             painPoints: "ペインポイント",
             confidence: "信頼度",
             severityLevels: {
+                critical: "深刻",
                 high: "高",
                 medium: "中",
                 low: "低"
@@ -5946,6 +5979,9 @@ bantAnalysis: {
             confidence: "信頼度",
             urgencyLevels: {
                 immediate: "即時",
+                this_week: "今週",
+                this_month: "今月",
+                this_quarter: "今四半期",
                 short_term: "短期",
                 medium_term: "中期",
                 long_term: "長期",
@@ -6510,6 +6546,7 @@ bantAnalysis: {
             painPoints: "문제점",
             confidence: "신뢰도",
             severityLevels: {
+                critical: "심각",
                 high: "높음",
                 medium: "중간",
                 low: "낮음"
@@ -6523,6 +6560,9 @@ bantAnalysis: {
             confidence: "신뢰도",
             urgencyLevels: {
                 immediate: "즉시",
+                this_week: "이번 주",
+                this_month: "이번 달",
+                this_quarter: "이번 분기",
                 short_term: "단기",
                 medium_term: "중기",
                 long_term: "장기",
@@ -7087,6 +7127,7 @@ bantAnalysis: {
             painPoints: "Больові точки",
             confidence: "Впевненість",
             severityLevels: {
+                critical: "Критична",
                 high: "Висока",
                 medium: "Середня",
                 low: "Низька"
@@ -7100,6 +7141,9 @@ bantAnalysis: {
             confidence: "Впевненість",
             urgencyLevels: {
                 immediate: "Негайно",
+                this_week: "Цього тижня",
+                this_month: "Цього місяця",
+                this_quarter: "Цього кварталу",
                 short_term: "Короткий термін",
                 medium_term: "Середній термін",
                 long_term: "Довгий термін",

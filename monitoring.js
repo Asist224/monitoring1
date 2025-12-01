@@ -6388,7 +6388,7 @@ ${analysisData.bantQualification.need ? `
             <div class="bant-factor-details">
                 <div class="bant-detail-row">
                     <span class="bant-detail-label">${MonitoringConfigManager.getTranslation('bantAnalysis.factors.need.severity')}:</span>
-                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.factors.need.severityLevels.${analysisData.bantQualification.need.severity}`)}</span>
+                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.need.severityLevels.${analysisData.bantQualification.need.severity}`)}</span>
                 </div>
                 <div class="bant-detail-row">
                     <span class="bant-detail-label">${MonitoringConfigManager.getTranslation('bantAnalysis.confidence')}:</span>
@@ -6431,7 +6431,7 @@ ${analysisData.bantQualification.timeline ? `
             <div class="bant-factor-details">
                 <div class="bant-detail-row">
                     <span class="bant-detail-label">${MonitoringConfigManager.getTranslation('bantAnalysis.factors.timeline.urgency')}:</span>
-                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.factors.timeline.urgencyLevels.${analysisData.bantQualification.timeline.urgency}`)}</span>
+                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.timeline.urgencyLevels.${analysisData.bantQualification.timeline.urgency}`)}</span>
                 </div>
                 ${analysisData.bantQualification.timeline.deadline ? `
                     <div class="bant-detail-row">
