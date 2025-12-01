@@ -1297,6 +1297,7 @@ bantAnalysis: {
                 unknown: "Неизвестно"
             },
             levels: {
+                c_level: "Топ-менеджер (C-level)",
                 executive: "Руководитель",
                 manager: "Менеджер",
                 user: "Пользователь",
@@ -1883,6 +1884,7 @@ bantAnalysis: {
                 unknown: "Unknown"
             },
             levels: {
+                c_level: "C-Level",
                 executive: "Executive",
                 manager: "Manager",
                 user: "User",
@@ -2465,6 +2467,7 @@ bantAnalysis: {
                 unknown: "Desconocido"
             },
             levels: {
+                c_level: "Nivel C",
                 executive: "Ejecutivo",
                 manager: "Gerente",
                 user: "Usuario",
@@ -3047,6 +3050,7 @@ bantAnalysis: {
                 unknown: "Inconnu"
             },
             levels: {
+                c_level: "Cadre supérieur",
                 executive: "Cadre",
                 manager: "Manager",
                 user: "Utilisateur",
@@ -3628,6 +3632,7 @@ bantAnalysis: {
                 unknown: "Unbekannt"
             },
             levels: {
+                c_level: "C-Level",
                 executive: "Führungskraft",
                 manager: "Manager",
                 user: "Benutzer",
@@ -4209,6 +4214,7 @@ bantAnalysis: {
                 unknown: "Sconosciuto"
             },
             levels: {
+                c_level: "Livello C",
                 executive: "Dirigente",
                 manager: "Manager",
                 user: "Utente",
@@ -4790,6 +4796,7 @@ bantAnalysis: {
                 unknown: "Desconhecido"
             },
             levels: {
+                c_level: "Nível C",
                 executive: "Executivo",
                 manager: "Gerente",
                 user: "Usuário",
@@ -5370,6 +5377,7 @@ bantAnalysis: {
                 unknown: "未知"
             },
             levels: {
+                c_level: "C级高管",
                 executive: "高管",
                 manager: "经理",
                 user: "用户",
@@ -5951,6 +5959,7 @@ bantAnalysis: {
                 unknown: "不明"
             },
             levels: {
+                c_level: "Cレベル",
                 executive: "役員",
                 manager: "マネージャー",
                 user: "ユーザー",
@@ -6532,6 +6541,7 @@ bantAnalysis: {
                 unknown: "알 수 없음"
             },
             levels: {
+                c_level: "C레벨",
                 executive: "임원",
                 manager: "관리자",
                 user: "사용자",
@@ -7113,6 +7123,7 @@ bantAnalysis: {
                 unknown: "Невідомо"
             },
             levels: {
+                c_level: "Топ-менеджер (C-level)",
                 executive: "Керівник",
                 manager: "Менеджер",
                 user: "Користувач",

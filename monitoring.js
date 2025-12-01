@@ -6346,11 +6346,11 @@ ${analysisData.bantQualification.authority ? `
             <div class="bant-factor-details">
                 <div class="bant-detail-row">
                     <span class="bant-detail-label">${MonitoringConfigManager.getTranslation('bantAnalysis.factors.authority.role')}:</span>
-                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.factors.authority.roles.${analysisData.bantQualification.authority.role}`)}</span>
+                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.authority.roles.${analysisData.bantQualification.authority.role}`)}</span>
                 </div>
                 <div class="bant-detail-row">
                     <span class="bant-detail-label">${MonitoringConfigManager.getTranslation('bantAnalysis.factors.authority.level')}:</span>
-                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.factors.authority.levels.${analysisData.bantQualification.authority.level}`)}</span>
+                    <span class="bant-detail-value">${MonitoringConfigManager.getTranslation(`bantAnalysis.authority.levels.${analysisData.bantQualification.authority.level}`)}</span>
                 </div>
                 ${analysisData.bantQualification.authority.position ? `
                     <div class="bant-detail-row">
